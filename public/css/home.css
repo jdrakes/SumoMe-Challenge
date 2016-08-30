@@ -1,0 +1,33 @@
+body {
+    /*background-image: url('');*/
+}
+
+#content-holder {
+    margin-top: 0;
+}
+
+#content {
+    margin-top: 0;
+    padding: 0;
+}
+
+#content h1 {
+    margin-bottom: 10px;
+}
+
+.navbar,
+.jumbotron {
+    margin-bottom: 0;
+}
+
+#content img {
+    width: 100%;
+}
+
+#content .panel:nth-child(odd) {
+    float: right;
+}
+
+#content .panel:nth-child(even) {
+    float: left;
+}

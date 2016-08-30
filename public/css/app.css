@@ -57,7 +57,7 @@ html {
 .navbar-inverse {
     background-color: white;
     border-color: transparent;
-    border-bottom-color: #0089ff;
+    border-bottom-color: #4301c5;
 }
 
 .navbar-toggle {
@@ -74,7 +74,7 @@ nav input {
 }
 
 .navbar-brand {
-    color: #0089ff;
+    color: #4301c5;
 }
 
 .vertical-align {
@@ -94,7 +94,7 @@ nav input {
 }
 
 input {
-    border: 1px solid #0089ff;
+    border: 1px solid #4301c5;
 }
 
 #content input {
@@ -107,15 +107,15 @@ input {
     margin-bottom: 30px;
 }
 
-.btn-spacex-blue {
+.btn-survey-purple {
     color: white;
     padding: 6px 12px;
-    background-color: #0089ff;
+    background-color: #4301c5;
     border-radius: 4px;
     border: 1px solid transparent;
 }
 
-.btn-spacex-blue:hover {
+.btn-survey-purple:hover {
     background-color: green;
 }
 

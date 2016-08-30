@@ -12,8 +12,10 @@ router.get('/', function(req, res, next) {
 /* Process login information. */
 router.post('/login_action', function(req, res) {
   console.log(req.body);
-  username = req.body.username;
-  password = req.body.password;
+  var username = req.body.username;
+  var password = req.body.password;
+  var id;
+  var displayname;
   console.log(username, password);
   console.log("I made it");
   var inputValid = checkInputs(username);
@@ -39,13 +41,13 @@ router.post('/login_action', function(req, res) {
         res.status(400).send({ error: 'Password was incorrect. Please try again.' });
         return false;
       } else {
-        var id = user.userId;
-        var displayname = user.displayName;
+        id = user.userId;
+        displayname = user.displayName;
         console.log("success?");
         console.log(id, displayname);
         req.session.userId = id;
         req.session.displayName = displayname;
-        res.send({ error: "", redirect: '/users/user/' + id });
+        res.send({ error: "", redirect: '/users/user/' + displayname });
         return true;
       }
     })
