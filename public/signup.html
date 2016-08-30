@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Survey Junkie Sign Up</title>
+    <link rel="shortcut icon" href="/img/favicon-web-v3.ico" type="image/x-icon" />
+    <link rel="stylesheet" type="text/css" href="/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/app.css">
+    <link rel="stylesheet" type="text/css" href="/css/signup.css">
+    <script type="text/javascript" src="/js/jquery-3.1.0.min.js"></script>
+    <script type="text/javascript" src="/bootstrap/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">Survey Junkie</a>
+            </div>
+            <div class="collapse navbar-collapse" id="myNavbar">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="/">Home</a></li>
+                    <li class="active"><a href="/about">About Us</a></li>
+                    <li class="active"><a href="/contact">Contact Us</a></li>
+                    <li class="active"><a href="/activities">Activities</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div id="content-holder" class="row">
+        <div id="content" class="col-xs-7 center-block">
+            <div class="center-block">
+                <h1>Become a Survey Junkie Today!</h1>
+                <form id="signup-form" action="/signup/signup_action" method="post">
+                    <input id="first_name" class="input-round" name="first_name" type="text" placeholder="First Name">
+                    <br>
+                    <input id="last_name" class="input-round" name="last_name" type="text" placeholder="Last Name">
+                    <br>
+                    <input id="email" class="input-round" name="email" type="text" placeholder="Email">
+                    <br>
+                    <input id="display" class="input-round" name="display" type="text" placeholder="Username">
+                    <br>
+                    <input type="password" id="password" class="input-round" name="password" placeholder="Password">
+                    <br>
+                    <input type="password" id="re_password" class="input-round" name="re_password" placeholder="Re-Enter Password">
+                    <br>
+                    <input class="btn-spacex-blue" type="submit" value="Sign Up">
+                </form>
+                <p>By signing up, you agree to the Terms of Service and Privacy Policy, including Cookie Use. Others will be able to find you by email or phone number when provided.</p>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="/js/signup.js"></script>
+    <script type="text/javascript" src="/js/login.js"></script>
+</body>
+
+</html>

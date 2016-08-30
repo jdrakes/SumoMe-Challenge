@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Survey Junkie Log In</title>
+    <link rel="shortcut icon" href="/img/favicon-web-v3.ico" type="image/x-icon" />
+    <link rel="stylesheet" type="text/css" href="/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/app.css">
+    <link rel="stylesheet" type="text/css" href="/css/login.css">
+    <script type="text/javascript" src="/js/jquery-3.1.0.min.js"></script>
+    <script type="text/javascript" src="/bootstrap/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="container-fluid">
+            <div class="navbar-header navbar-fixed-top">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">Survey Junkie</a>
+            </div>
+            <div class="collapse navbar-collapse" id="myNavbar">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="/">Home</a></li>
+                    <li class="active"><a href="/signup">Sign Up</a></li>
+                    <li class="active"><a href="/about">About Us</a></li>
+                    <li class="active"><a href="/contact">Contact Us</a></li>
+                    <li class="active"><a href="/activities">Activities</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div id="content-holder" class="row">
+        <div id="content" class="col-xs-7 center-block">
+            <div class="center-block">
+                <h1>Sign In!</h1>
+                <form id="login-form" action="/login/login_action" method="post">
+                    <div class="form-group">
+                        <input id="username" name="username" type="text" placeholder="Email" class='input-round'>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" id="password" name="password" placeholder="Password" class='input-round'>
+                    </div>
+                    <button type="submit" class="btn-spacex-blue">Sign in</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="/js/login.js"></script>
+</body>
+
+</html>
