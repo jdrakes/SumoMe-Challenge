@@ -1,10 +1,8 @@
 $(document).ready(function() {
-  // if (window.location.pathname === '/login') {
-  //   loginAction();
-  // } else
-  //   getLoggedIn();
-  $('#myNavbar').append('<form id="login-form" action="/login/login_action" method="post" class="navbar-form navbar-right"><div class="form-group"><input id="username" name="username" type="text" placeholder="Email" class="input-round form-control"></div><div class="form-group"><input type="password" id="password" name="password" placeholder="Password" class="input-round form-control"></div><button type="submit" class="btn-spacex-blue">Sign in</button></form>');
-  loginAction();
+  if (window.location.pathname === '/login') {
+    loginAction();
+  } else
+    getLoggedIn();
 });
 
 /*

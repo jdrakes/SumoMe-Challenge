@@ -23,33 +23,37 @@ router.post('/login_action', function(req, res) {
     return;
   }
   User.findOne({
-    "email": username
-  }, function(err, user) {
-    console.log("user is" + user);
-    if (err) {
-      console.log("err");
-      res.status(400).send({ error: err });
-    } else if (!user) {
-      console.log("!user");
-      res.status(400).send({ error: 'Username not found. Please try again.' });
-      return;
-    } else if (user === undefined || user === null || user.length === 0) {
-      res.status(400).send({ error: 'Username not found. Please try again.' });
-      return;
-    } else if (user.password != password || user.email != username) {
-      console.log("wrong password, got " + password + ", expected " + user.password);
-      res.status(400).send({ error: 'Password was incorrect. Please try again.' });
-      return;
-    } else {
-      var id = user._id;
-      var displayname = user.display;
-      console.log("success?");
-      req.session.userid = id;
-      req.session.displayname = displayname;
-      res.send({ error: "", redirect: '/users/user/' + displayname });
-    }
-  });
-
+      where: {
+        "email": username
+      }
+    })
+    .then(function(user) {
+      console.log("user is" + user);
+      console.log(user);
+      if (!user) {
+        console.log("!user");
+        res.status(400).send({ error: 'Username not found. Please try again.' });
+        return false;
+      } else if (user.password != password || user.email != username) {
+        console.log("wrong password, got " + password + ", expected " + user.password);
+        res.status(400).send({ error: 'Password was incorrect. Please try again.' });
+        return false;
+      } else {
+        var id = user.userId;
+        var displayname = user.displayName;
+        console.log("success?");
+        console.log(id, displayname);
+        req.session.userId = id;
+        req.session.displayName = displayname;
+        res.send({ error: "", redirect: '/users/user/' + id });
+        return true;
+      }
+    })
+    .catch(function(e) {
+      console.log(e);
+      res.status(400).send({ error: e });
+      return e;
+    });
 });
 
 function checkInputs(username) {

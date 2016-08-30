@@ -23,6 +23,7 @@ var User = sequelize.define('user', {
     field: 'last_name'
   },
   email: { type: Sequelize.STRING, unique: true },
+  displayName: { type: Sequelize.STRING, unique: true, field: 'display_name' },
   password: Sequelize.STRING,
   views: Sequelize.INTEGER,
   answered: Sequelize.STRING

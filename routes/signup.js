@@ -3,6 +3,7 @@ var router = express.Router();
 var _und = require('underscore');
 var User = require('../db/User');
 var path = require('path');
+var shortid = require('shortid');
 
 /* GET signup page. */
 router.get('/', function(req, res, next) {
@@ -13,12 +14,13 @@ router.get('/', function(req, res, next) {
 router.post('/signup_action', function(req, res) {
   var email = req.body.email;
   var username = req.body.display;
-  var validInputs = checkInputs(req.body);
   var result = null;
+  var validInputs;
   delete req.body.re_password;
-  console.log(req.body);
+  validInputs = checkInputs(req.body);
   if (validInputs.error !== '') {
     res.send(validInputs);
+    return;
   }
 
   // Validate unique email and username
@@ -76,6 +78,8 @@ function checkInputs(inputsObj) {
   var expectedKeys = ["first_name", "last_name", "email", "display", "password"];
   var inputs = _und.values(inputsObj);
   var keys = _und.keys(inputsObj);
+  console.log(inputs);
+  console.log(keys);
   if (keys.length !== expectedKeys.length) {
     return { error: "Unexpected number of inputs submitted." };
   } else {
@@ -104,7 +108,8 @@ function addUser(userinfo) {
     return User.create({
       firstName: userinfo.first_name,
       lastName: userinfo.last_name,
-      userId: userinfo.display,
+      userId: shortid.generate(),
+      displayName: userinfo.display,
       email: userinfo.email,
       password: userinfo.password,
       admin: false
