@@ -1,5 +1,5 @@
 $(document).ready(function() {
-  if (window.location.pathname === '/login') {
+  if (window.location.pathname === '/admin') {
     loginAction();
   } else
     getLoggedIn();
@@ -9,10 +9,10 @@ $(document).ready(function() {
     Function to determine if a seesion exists for current user.
  */
 function getLoggedIn() {
-  $.get('/users/loggedin')
+  $.get('/admin/loggedin')
     .done(function(result) {
-      $('#myNavbar').append('<ul class="nav navbar-nav navbar-right"><li class="active"><a href="/users/user/' + result.username + '" id="username">' + result.username + '</a></li></ul>');
-      $('#username').html('Hello '+result.username);
+      $('#myNavbar').append('<ul class="nav navbar-nav navbar-right"><li class="active"><a href="/admin/user/' + result.username + '" id="username">' + result.username + '</a></li></ul>');
+      $('#username').html('Hello, admin');
     })
     .fail(function(result) {
       $('#myNavbar').append('<form id="login-form" action="/login/login_action" method="post" class="navbar-form navbar-right"><div class="form-group"><input id="username" name="username" type="text" placeholder="Email" class="input-round form-control"></div><div class="form-group"><input type="password" id="password" name="password" placeholder="Password" class="input-round form-control"></div><button type="submit" class="btn-survey-purple">Sign in</button></form>');
@@ -66,7 +66,7 @@ function loginAction() {
 function login(data, defer) {
   data = JSON.stringify(data);
   $.ajax({
-      url: '/login/login_action',
+      url: '/admin/login_action',
       method: "POST",
       data: data,
       contentType: "application/json",

@@ -15,6 +15,7 @@ var routes = require('./routes/index');
 var users = require('./routes/users');
 var signup = require('./routes/signup');
 var login = require('./routes/login');
+var admin = require('./routes/admin');
 
 /*Application Defined*/
 var app = express();
@@ -95,6 +96,7 @@ store.sync();
 app.use('/', routes);
 app.use('/signup', signup);
 app.use('/login', login);
+app.use('/admin', admin);
 app.use('/users', users);
 
 // catch 404 and forward to error handler

@@ -12,10 +12,11 @@ var sequelize = new Sequelize('sumo', 'root', 'sumoadmin', {
 
 
 var Question = sequelize.define('question', {
-	questionId: {Sequelize.INTEGER , autoIncrement: true, primaryKey: true},
+	questionId: {type: Sequelize.INTEGER , autoIncrement: true, primaryKey: true},
   question: {
     type: Sequelize.STRING,
     unique: true
+  }
 }, {
   freezeTableName: true // Model tableName will be the same as the model name
 });

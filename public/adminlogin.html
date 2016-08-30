@@ -2,11 +2,11 @@
 <html>
 
 <head>
-    <title>Survey Junkies</title>
+    <title>Survey Junkies Log In</title>
     <link rel="shortcut icon" href="/img/favicon-web-v3.ico" type="image/x-icon" />
     <link rel="stylesheet" type="text/css" href="/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="/css/app.css">
-    <link rel="stylesheet" type="text/css" href="/css/userpage.css">
+    <link rel="stylesheet" type="text/css" href="/css/login.css">
     <script type="text/javascript" src="/js/jquery-3.1.0.min.js"></script>
     <script type="text/javascript" src="/bootstrap/js/bootstrap.min.js"></script>
 </head>
@@ -20,36 +20,33 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">Survey Junkies</a>
+                <a class="navbar-brand" href="/">Survey Junkies</a>
             </div>
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav">
                     <li class="active"><a href="/">Home</a></li>
                     <li class="active"><a href="/signup">Sign Up</a></li>
                 </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li class='active'>
-                        <a href="" id='username'></a>
-                    </li>
-                    <li class='active'>
-                        <a href="/users/logout" id='logout'><span class="glyphicon glyphicon-log-out"></span></a>
-                    </li>
-                </ul>
             </div>
         </div>
     </nav>
     <div id="content-holder" class="row">
-        <div id="content" class="col-xs-7 center-block vertical-align">
+        <div id="content" class="col-xs-7 center-block">
             <div class="center-block">
-                <h1 class="header">Welcome!</h1>
-                <p>Thank you for signing up to be a Survey Junkie We are proccessing your information at this time and will email you with the next steps We look forward to provinding your kid(s) with a camp that is out of this world.
-                </p>
-                <br>
-                <p>No further actions are available at this time. Your profile will go live once you respond to the verification email.</p>
+                <h1>Sign In Admin!</h1>
+                <form id="login-form" action="/admin/login_action" method="post">
+                    <div class="form-group">
+                        <input id="username" name="username" type="text" placeholder="Email" class='input-round'>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" id="password" name="password" placeholder="Password" class='input-round'>
+                    </div>
+                    <button type="submit" class="btn-survey-purple">Sign in</button>
+                </form>
             </div>
         </div>
     </div>
-    <script type="text/javascript" src="/js/userpage.js"></script>
+    <script type="text/javascript" src="/js/adminlogin.js"></script>
 </body>
 
 </html>
