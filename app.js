@@ -89,6 +89,13 @@ app.use(session({
   saveUninitialized: false
 }));
 
+app.use(function(req, res, next){
+  if(!req.session.userId){
+    req.session.userId = 'guest';
+    req.session.answered = '[]';
+  }
+  next();
+})
 
 store.sync();
 // sequelize.sync();

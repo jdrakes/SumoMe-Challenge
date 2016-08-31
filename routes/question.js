@@ -24,9 +24,14 @@ router.get('/modal', function(req, res, next) {
 
 router.get('/', function(req, res) {
   var userId = req.session.userId;
+  var answered = req.session.answered;
   var randomNum;
   var answeredQuestions;
-  if (!userId) {
+
+  //Implemented guest random unique questions
+  if (!userId || userId === 'guest') {
+    if(userId === 'guest')
+      answered = JSON.parse(answered);
     return Question.findAll({})
       .then(function(questions) {
         var questionIds = [];
@@ -42,11 +47,12 @@ router.get('/', function(req, res) {
           questionIds.push(questionId);
           questionsObj[questionId] = { 'id': questionId, 'question': question, 'choices': answerChoices };
         })
-
-        // questionIds = _und.difference(questionIds, answeredQuestions);
-        // console.log(questionIds);
+        if(answered)
+          questionIds = _und.difference(questionIds, answered);
+        console.log(answered);
+        console.log(questionIds);
         if (questionIds.length === 0)
-          throw new Error('No new questions for user.');
+          throw new Error('No new questions for guest.');
         var randomNum = getRandomInt(0, questionIds.length);
         console.log(randomNum);
         res.send(questionsObj[questionIds[randomNum]]);
@@ -125,6 +131,7 @@ router.get('/', function(req, res) {
  */
 router.post('/answer', function(req, res) {
   var userId = req.session.userId;
+  var guestAnswered = req.session.answered;
   var answerObj = JSON.parse(req.body.answer);
   var questionId = answerObj.id;
   var question = answerObj.question;
@@ -133,7 +140,9 @@ router.post('/answer', function(req, res) {
   var questionAnswers;
 
   //If the user is a guest record answer only
-  if (!userId) {
+  if (!userId || userId === 'guest') {
+    if(userId === 'guest')
+      guestAnswered = JSON.parse(guestAnswered);
     return sequelize.transaction(function(t) {
         return Question.findOne({
             where: {
@@ -153,6 +162,13 @@ router.post('/answer', function(req, res) {
                 'questionId': questionId
               }
             }, { transaction: t })
+            .then(function(){
+              if(guestAnswered){
+                guestAnswered.push(questionId);
+                req.session.answered = JSON.stringify(guestAnswered);
+              }
+              return true;
+            })
           })
       })
       .then(function(result) {
