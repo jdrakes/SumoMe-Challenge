@@ -130,3 +130,7 @@ input {
     width: 385px;
     color: #a5a1a1;
 }
+
+#survey-modal-btn {
+    display: none;
+}

@@ -24,7 +24,6 @@ var currentQuestion;
 $(document).ready(function() {
   $('body').append(modal);
   getQuestion();
-  $('#survey-modal-btn').click();
 });
 
 
@@ -52,6 +51,7 @@ function getQuestion(defer) {
       $('#question-submit').click(function(event) {
         submitAnswer(currentQuestion, currenAnswer);
       });
+      $('#survey-modal-btn').click();
     })
     .fail(function(error) {
       errorMessage = JSON.parse(error.responseText);
