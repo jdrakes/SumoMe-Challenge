@@ -1,18 +1,22 @@
-body {
-    /*background-image: url('');*/
-}
-
-#content-holder {
-    margin-top: 0;
-}
-
-#content {
-    margin-top: 0;
-    padding: 0;
-}
-
-#content h1 {
+#content p {
+    text-align: center;
+    width: 100%;
+    max-width: 500px;
+    color: #4301c5;
+    font-size: 20px;
+    margin: auto;
     margin-bottom: 10px;
+}
+
+#photoHolder {
+    margin-top: 50px;
+    margin-right: auto;
+    margin-left: auto;
+    width: 500px;
+}
+
+#photoHolder img {
+    width: 100%;
 }
 
 .navbar,
@@ -20,14 +24,17 @@ body {
     margin-bottom: 0;
 }
 
-#content img {
-    width: 100%;
+.jumbotron h1,
+.jumbotron h2 {
+    text-align: center;
 }
 
-#content .panel:nth-child(odd) {
-    float: right;
+#content-holder {
+    margin-top: 0;
+    margin-bottom: 30px;
 }
 
-#content .panel:nth-child(even) {
-    float: left;
+#content {
+    margin-top: 50px;
+    padding: 0;
 }

@@ -77,7 +77,7 @@ app.use(cookieParser());
 app.use('/bootstrap', express.static(path.join(__dirname, 'public/bootstrap')));
 app.use('/css', express.static(path.join(__dirname, 'public/css')));
 app.use('/js', express.static(path.join(__dirname, 'public/js')));
-app.use('/img', express.static(path.join(__dirname, 'public/images')));
+app.use('/img', express.static(path.join(__dirname, 'public/img')));
 
 /*Initiate Sessions Post Static Resource Declarations*/
 app.use(session({
