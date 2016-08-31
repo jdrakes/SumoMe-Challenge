@@ -6,7 +6,7 @@
     <link rel="shortcut icon" href="/img/favicon-web-v3.ico" type="image/x-icon" />
     <link rel="stylesheet" type="text/css" href="/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="/css/app.css">
-    <link rel="stylesheet" type="text/css" href="/css/userpage.css">
+    <link rel="stylesheet" type="text/css" href="/css/adminpage.css">
     <script type="text/javascript" src="/js/jquery-3.1.0.min.js"></script>
     <script type="text/javascript" src="/bootstrap/js/bootstrap.min.js"></script>
 </head>
@@ -39,17 +39,43 @@
         </div>
     </nav>
     <div id="content-holder" class="row">
-        <div id="content" class="col-xs-7 center-block vertical-align">
-            <div class="center-block">
-                <h1 class="header">Welcome!</h1>
-                <p>Thank you for signing up to be a Survey Junkie We are proccessing your information at this time and will email you with the next steps We look forward to provinding your kid(s) with a camp that is out of this world.
-                </p>
-                <br>
-                <p>No further actions are available at this time. Your profile will go live once you respond to the verification email.</p>
+        <div id="content" class="col-xs-7 center-block">
+            <div id="exTab3" class="container">
+                <ul class="nav nav-pills">
+                    <li class="active">
+                        <a href="#questionHolder" data-toggle="tab">Create Question</a>
+                    </li>
+                    <li><a href="#results" data-toggle="tab">Results</a>
+                    </li>
+                </ul>
+                <div class="tab-content clearfix">
+                    <div class="tab-pane active" id="questionHolder">
+                        <h3>Create a New Question</h3>
+                        <h4>Must fill out question box and write answer choices for choice boxx one and two. Choice box three is optional.</h4>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Write Question</h3>
+                            </div>
+                            <div class="panel-body">
+                            <form id="question-form" action="/admin/question" method="post">  
+                                <textarea id="question" name="question" class="form-control" rows="3"></textarea>
+                                <input id='choice1' name="choice1" type="text" class="choice form-control" placeholder="Answer Choice 1">
+                                <input id='choice2' name="choice2" type="text" class="choice form-control" placeholder="Answer Choice 2">
+                                <input id='choice3' name="choice3" type="text" class="choice form-control" placeholder="Answer Choice 3">
+                                <button class="btn btn-default" type="submit">Create Question</button>
+                            </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="results">
+                        <h3>Survey Results</h3>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
     <script type="text/javascript" src="/js/adminpage.js"></script>
+    <script type="text/javascript" src="/js/createquestion.js"></script>
 </body>
 
 </html>

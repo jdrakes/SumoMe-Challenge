@@ -102,7 +102,8 @@ function checkInputs(inputsObj) {
     Add new user to mongo database;
  */
 function addUser(userinfo) {
-  User.sync({ force: false }).then(function() {
+  User.sync({ force: false })
+  .then(function() {
     // Table created
     console.log('User Table Created');
     return User.create({

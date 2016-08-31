@@ -138,6 +138,59 @@ router.get('/user/:userId', authenticatedAdmin, function(req, res, next) {
     });
 });
 
+/*Create Question Handler*/
+router.post('/question', authenticatedAdmin, function(req, res) {
+  console.log(req.body);
+  var body = req.body;
+  var question = body.question;
+  var choice1 = body.choice1;
+  var choice2 = body.choice2;
+  var choice3 = body.choice3;
+  if (body.question && body.choice1 && body.choice2 && body.choice3){
+      Question.sync({force: false})
+      .then(function(){
+        console.log('Creating Question');
+        Question.create({
+            'question': question,
+            'answerChoices': JSON.stringify([choice1,choice2,choice3]),
+            'answer': JSON.stringify([0,0,0])
+        })
+        .then(function(){
+          res.send({error: ''});
+          return;
+        })
+      })
+       .catch(function(e) {
+        console.log(e);
+        res.status(400).send({ error: e });
+        return e;
+      });
+  }
+  else if(body.question && body.choice1 && body.choice2 ){
+      Question.sync({force: false})
+      .then(function(){
+        console.log('Creating Question');
+        Question.create({
+            'question': question,
+            'answerChoices': JSON.stringify([choice1,choice2]),
+            'answer': JSON.stringify([0,0])
+        })
+        .then(function(){
+          res.send({error: ''});
+          return;
+        })
+      })
+       .catch(function(e) {
+        console.log(e);
+        res.status(400).send({ error: e });
+        return e;
+      });
+  }
+  else{
+    res.status(400).send({error: 'Invalid inputs submitted. Please fill out question box and answer choices one and two.'})
+  }
+});
+
 /*
     Verify is user has been authenticated in session.
  */

@@ -16,7 +16,9 @@ var Question = sequelize.define('question', {
   question: {
     type: Sequelize.STRING,
     unique: true
-  }
+  },
+  answerChoices: {type: Sequelize.STRING, field: 'answer_choices'},
+  answer: Sequelize.STRING
 }, {
   freezeTableName: true // Model tableName will be the same as the model name
 });

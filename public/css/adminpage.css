@@ -1,0 +1,11 @@
+#content p {
+    text-align: center;
+    width: 100%;
+    max-width: 500px;
+    color: #0089ff;
+    font-size: 20px;
+}
+
+#content textarea {
+	margin-bottom: 20px;
+}
