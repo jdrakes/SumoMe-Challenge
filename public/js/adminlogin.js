@@ -2,14 +2,14 @@ $(document).ready(function() {
   if (window.location.pathname === '/admin') {
     loginAction();
   } else
-    getLoggedIn();
+    getAdminLoggedIn();
 });
 
 /*
     Function to determine if a seesion exists for current user.
  */
-function getLoggedIn() {
-  $.get('/admin/loggedin')
+function getAdminLoggedIn() {
+  $.get('/admin/loggedin/permission')
     .done(function(result) {
       $('#myNavbar').append('<ul class="nav navbar-nav navbar-right"><li class="active"><a href="/admin/user/' + result.username + '" id="username">' + result.username + '</a></li></ul>');
       $('#username').html('Hello, admin');

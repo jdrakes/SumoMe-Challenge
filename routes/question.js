@@ -139,6 +139,15 @@ router.post('/answer', function(req, res) {
   var answer = answerObj.choices[answerIndex];
   var questionAnswers;
 
+  //If no answer was selected
+  if (!answerIndex && answerIndex !== 0){
+    res.status(400).send({ error: 'No answer was submitted.' });
+    return;
+  }
+  else if (answerIndex < 0){
+    res.status(400).send({ error: 'No answer was submitted.' });
+    return;
+  }
   //If the user is a guest record answer only
   if (!userId || userId === 'guest') {
     if(userId === 'guest')

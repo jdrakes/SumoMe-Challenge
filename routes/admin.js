@@ -10,8 +10,38 @@ router.get('/', function(req, res, next) {
   res.sendFile(path.join(__dirname, '../public/adminlogin.html'));
 });
 
-/*Get if user is logged in*/
+/*Get if admin user is logged in*/
 router.get('/loggedin', function(req, res, next) {
+  console.log(req.session.userId);
+  if (!req.session.userId) {
+    res.status(400).send({ username: null });
+  } else {
+    User.findOne({
+        where: {
+          "userId": req.session.userId,
+          "admin": true
+        }
+      })
+      .then(function(user) {
+        console.log(user);
+        if (!user) {
+          res.status(400). send({error: 'Not an admin.'});
+          return;
+        } else {
+          res.send({ username: req.session.userId });
+          return;
+        }
+      })
+      .catch(function(e) {
+        console.log(e);
+        res.status(400).send({ error: e.message });
+        return e;
+      });
+  }
+});
+
+/*Get if admin user is logged in permission*/
+router.get('/loggedin/permission', function(req, res, next) {
   console.log(req.session.userId);
   if (!req.session.userId) {
     res.status(400).send({ username: null });
@@ -34,7 +64,7 @@ router.get('/loggedin', function(req, res, next) {
       })
       .catch(function(e) {
         console.log(e);
-        res.status(400).send({ error: e });
+        res.status(400).send({ error: e.message });
         return e;
       });
   }

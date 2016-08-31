@@ -18,7 +18,7 @@ var modalArray = ['<!-- Button trigger modal -->',
   '</div>'
 ];
 var modal = modalArray.join('');
-var currenAnswer = -1;
+var currentAnswer = -1;
 var currentQuestion;
 
 $(document).ready(function() {
@@ -46,10 +46,10 @@ function getQuestion(defer) {
       }
       $('.choice').change(function(event) {
         console.log($(this).val());
-        currenAnswer = $(this).val();
+        currentAnswer = $(this).val();
       });
       $('#question-submit').click(function(event) {
-        submitAnswer(currentQuestion, currenAnswer);
+        submitAnswer(currentQuestion, currentAnswer);
       });
       $('#survey-modal-btn').click();
     })
@@ -64,6 +64,11 @@ function submitAnswer(questionObj, answer) {
   var answerObj = questionObj;
   answerObj['answer'] = answer;
   answerObj = JSON.stringify(answerObj);
+  if(currentAnswer < 0){
+    alert('Please choose an answer before submitting.');
+    return;
+  }
+
   $.post('/question/answer', { 'answer': answerObj })
     .done(function(result) {
       $('#survey-modal-btn').click();

@@ -53,7 +53,7 @@ var Session = sequelize.define('Session', {
 var store = new SequelizeStore({
   db: sequelize,
   checkExpirationInterval: 15 * 60 * 1000, // The interval at which to cleanup expired sessions in milliseconds.
-  expiration: 24 * 60 * 60 * 1000, // The maximum age (in milliseconds) of a valid session.
+  expiration: 60 * 60 * 1000, // The maximum age (in milliseconds) of a valid session.
   table: 'Session',
   extendDefaultFields: extendDefaultFields
 });

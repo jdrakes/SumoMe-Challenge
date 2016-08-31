@@ -10,6 +10,8 @@ router.get('/loggedin', function(req, res, next) {
     res.status(400).send({ username: null });
   } else if (!req.session.userId) {
     res.status(400).send({ username: null });
+  }else if (req.session.userId === 'guest') {
+    res.status(400).send({ username: null });
   } else {
     res.send({ username: req.session.displayName });
   }
@@ -33,6 +35,9 @@ router.get('/user/:displayName', authenticated, function(req, res, next) {
   } else if (!req.session.userId && !req.session.displayName) {
     res.redirect('/');
     return;
+  }
+  else if(req.session.userId === 'guest'){
+    res.redirect('/');
   }
 
   User.findOne({

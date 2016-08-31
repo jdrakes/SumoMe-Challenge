@@ -1,9 +1,26 @@
 $(document).ready(function() {
-  if (window.location.pathname === '/login') {
-    loginAction();
-  } else
-    getLoggedIn();
+  // if (window.location.pathname === '/login') {
+  //   loginAction();
+  // } else
+  //   getLoggedIn();
+  getAdminLoggedIn();
 });
+
+function getAdminLoggedIn() {
+  $.get('/admin/loggedin')
+    .done(function(result) {
+      $('#myNavbar').append('<ul class="nav navbar-nav navbar-right"><li class="active"><a href="/admin/user/' + result.username + '" id="username">' + result.username + '</a></li></ul>');
+      $('#username').html('Hello, admin');
+    })
+    .fail(function(result) {
+      // $('#myNavbar').append('<form id="login-form" action="/login/login_action" method="post" class="navbar-form navbar-right"><div class="form-group"><input id="username" name="username" type="text" placeholder="Email" class="input-round form-control"></div><div class="form-group"><input type="password" id="password" name="password" placeholder="Password" class="input-round form-control"></div><button type="submit" class="btn-survey-purple">Sign in</button></form>');
+      // loginAction();
+      if (window.location.pathname === '/login') {
+        loginAction();
+      } else
+        getLoggedIn();
+    });
+}
 
 /*
     Function to determine if a seesion exists for current user.
@@ -12,7 +29,7 @@ function getLoggedIn() {
   $.get('/users/loggedin')
     .done(function(result) {
       $('#myNavbar').append('<ul class="nav navbar-nav navbar-right"><li class="active"><a href="/users/user/' + result.username + '" id="username">' + result.username + '</a></li></ul>');
-      $('#username').html('Hello '+result.username);
+      $('#username').html('Hello ' + result.username);
     })
     .fail(function(result) {
       $('#myNavbar').append('<form id="login-form" action="/login/login_action" method="post" class="navbar-form navbar-right"><div class="form-group"><input id="username" name="username" type="text" placeholder="Email" class="input-round form-control"></div><div class="form-group"><input type="password" id="password" name="password" placeholder="Password" class="input-round form-control"></div><button type="submit" class="btn-survey-purple">Sign in</button></form>');

@@ -1,4 +1,5 @@
 $(document).ready(function() {
+  getAdminLoggedIn();
   var user = checkUrl();
   $('#username').html('Hello, ' + user);
   $('.header').html('Welcome ' + user + "!")
@@ -18,4 +19,15 @@ function checkUrl() {
   } else {
     return paths[3];
   }
+}
+
+/*Check if user is an admin*/
+function getAdminLoggedIn() {
+  $.get('/admin/loggedin')
+    .done(function(result) {
+      $('logout').attr('href', '/admin/logout');
+    })
+    .fail(function(result) {
+      console.log(result);
+    });
 }
