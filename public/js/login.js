@@ -51,7 +51,7 @@ function loginAction() {
       var input = $(this);
       var inputVal = $(this).val();
 
-      if (inputVal) {
+      if (!inputVal) {
         msg += 'Please fill out ' + this.name + '.\n';
         inputArr.push(inputVal);
       } else if (inputVal !== 'Sign Up') {
@@ -93,7 +93,7 @@ function login(data, defer) {
       dataType: 'json'
     }).done(function(data) {
       var result;
-      if (data.error) {
+      if (!data.error) {
         result = 'success';
         if (typeof data.redirect == 'string')
           window.location = data.redirect;

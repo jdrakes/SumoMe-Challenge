@@ -30,6 +30,7 @@ function getAdminLoggedIn() {
   $.get('/admin/loggedin')
     .done(function(result) {
       $('logout').attr('href', '/admin/logout');
+      $('#username').attr('href', '/admin/user/'+result.username)
     })
     .fail(function(result) {
       console.log(result);

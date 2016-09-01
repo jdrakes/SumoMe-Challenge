@@ -37,10 +37,10 @@ $(document).ready(function() {
 function getQuestion() {
   $.get('/question')
     .done(function(question) {
-      var questionId = question['id'];
-      var choices = question['choices'];
-      var question = question['question'];
       currentQuestion = question;
+      var questionId = question.id;
+      var choices = question.choices;
+      var question = question.question;
       $('.modal-title').html(question);
       for (c in choices) {
         var choice = ['<div class="radio">',
@@ -74,7 +74,7 @@ function getQuestion() {
  */
 function submitAnswer(questionObj, answer) {
   var answerObj = questionObj;
-  answerObj['answer'] = answer;
+  answerObj.answer = answer;
   answerObj = JSON.stringify(answerObj);
   if (currentAnswer < 0) {
     alert('Please choose an answer before submitting.');

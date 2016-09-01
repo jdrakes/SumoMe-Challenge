@@ -54,11 +54,11 @@ router.get('/user/:displayName', authenticated, function(req, res, next) {
         } else {
           session.destroy();;
           res.redirect('/');
-          return;
+          return false;
         }
       }
       res.sendFile(path.join(__dirname, '../public/user.html'));
-      return;
+      return true;
     })
     .catch(function(e) {
       console.log(e);

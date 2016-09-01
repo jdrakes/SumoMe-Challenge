@@ -52,7 +52,7 @@ function createQuestion(data, defer) {
       dataType: 'json'
     }).done(function(data) {
       var result;
-      if (data.error) {
+      if (!data.error) {
         result = 'success';
       }
       if (defer)

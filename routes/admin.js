@@ -25,10 +25,10 @@ router.get('/loggedin', function(req, res, next) {
       .then(function(user) {
         if (!user) {
           res.status(400).send({ error: 'Not an admin.' });
-          return;
+          return false;
         } else {
           res.send({ username: session.userId });
-          return;
+          return true;
         }
       })
       .catch(function(e) {
@@ -145,11 +145,11 @@ router.get('/user/:userId', authenticatedAdmin, function(req, res, next) {
         } else {
           req.session.destroy();;
           res.redirect('/');
-          return;
+          return false;
         }
       }
       res.sendFile(path.join(__dirname, '../public/adminuser.html'));
-      return;
+      return true;
     })
     .catch(function(e) {
       console.log(e);
@@ -176,7 +176,7 @@ router.post('/question', authenticatedAdmin, function(req, res) {
           })
           .then(function() {
             res.send({ error: '' });
-            return;
+            return true;
           })
       })
       .catch(function(e) {
@@ -195,7 +195,7 @@ router.post('/question', authenticatedAdmin, function(req, res) {
           })
           .then(function() {
             res.send({ error: '' });
-            return;
+            return true;
           })
       })
       .catch(function(e) {
@@ -218,13 +218,11 @@ router.get('/questionIds', authenticatedAdmin, function(req, res) {
       if (!questions)
         throw new Error('No questions in databse.');
 
-      console.log(questions);
       questions.forEach(function(log) {
         question = log.get().question;
         questionId = log.get().questionId;
         questionIds.push({ 'id': questionId, 'question': question });
       })
-      console.log(questionIds);
       if (questionIds.length === 0)
         throw new Error('No new questions for user.');
       res.send(questionIds);
@@ -276,10 +274,9 @@ function authenticatedAdmin(req, res, next) {
         }
       })
       .then(function(user) {
-        console.log(user);
         if (!user) {
           res.redirect('/');
-          return;
+          return false;
         } else
           return next();
       })
