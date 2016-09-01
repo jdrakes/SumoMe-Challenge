@@ -17,11 +17,6 @@ var sequelize = new Sequelize('sumo', 'root', 'sumoadmin', {
   }
 });
 
-/* test modal */
-router.get('/modal', function(req, res, next) {
-  res.sendFile(path.join(__dirname, '../public/modal.html'));
-});
-
 router.get('/', function(req, res) {
   var userId = req.session.userId;
   var answered = req.session.answered;
