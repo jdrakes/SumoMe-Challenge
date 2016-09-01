@@ -10,7 +10,7 @@ var Sequelize = require('sequelize');
 var SequelizeStore = require('connect-session-sequelize')(session.Store);
 var User = require('./db/User');
 
-/*Routes*/
+// Routes
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var signup = require('./routes/signup');
@@ -18,20 +18,26 @@ var login = require('./routes/login');
 var admin = require('./routes/admin');
 var question = require('./routes/question');
 
-/*Application Defined*/
+// Application Defined
 var app = express();
 
-/*Pre Application Settings*/
+// Pre Application Settings
+// Initialize sequelize database connection
 var sequelize = new Sequelize('sumo', 'root', 'sumoadmin', {
   host: 'localhost',
   dialect: 'mysql',
-  pool: {
-    max: 5,
-    min: 0,
-    idle: 10000
-  }
+  pool: { max: 5, min: 0, idle: 10000 }
 });
 
+// Define Session table for session store
+var Session = sequelize.define('Session', {
+  sid: { type: Sequelize.STRING, primaryKey: true },
+  userId: Sequelize.STRING,
+  expires: Sequelize.DATE,
+  data: Sequelize.STRING(50000)
+});
+
+// Add custom defaults to session store table
 function extendDefaultFields(defaults, session) {
   return {
     data: defaults.data,
@@ -40,16 +46,7 @@ function extendDefaultFields(defaults, session) {
   };
 }
 
-var Session = sequelize.define('Session', {
-  sid: {
-    type: Sequelize.STRING,
-    primaryKey: true
-  },
-  userId: Sequelize.STRING,
-  expires: Sequelize.DATE,
-  data: Sequelize.STRING(50000)
-});
-
+// Initilaize session store
 var store = new SequelizeStore({
   db: sequelize,
   checkExpirationInterval: 15 * 60 * 1000, // The interval at which to cleanup expired sessions in milliseconds.
@@ -58,29 +55,25 @@ var store = new SequelizeStore({
   extendDefaultFields: extendDefaultFields
 });
 
-// User.belongsTo(store.sessionModel, {
-//   foreignKeyConstraint: true
-// });
-
-/*Application Settiings*/
+// Application Settiings
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 // uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+// app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-/*Define Static Resource Routes*/
+// Define Static Resource Routes
 app.use('/bootstrap', express.static(path.join(__dirname, 'public/bootstrap')));
 app.use('/css', express.static(path.join(__dirname, 'public/css')));
 app.use('/js', express.static(path.join(__dirname, 'public/js')));
 app.use('/img', express.static(path.join(__dirname, 'public/img')));
 
-/*Initiate Sessions Post Static Resource Declarations*/
+// Initiate Sessions Post Static Resource Declarations
 app.use(session({
   name: 'sumoSession',
   secret: 'keyboard cat',
@@ -89,18 +82,20 @@ app.use(session({
   saveUninitialized: false
 }));
 
-app.use(function(req, res, next){
-  if(!req.session.userId){
-    req.session.userId = 'guest';
-    req.session.answered = '[]';
+// Create custom middleware to enable guest logic.
+app.use(function(req, res, next) {
+  var session = req.session;
+  if (!session.userId) {
+    session.userId = 'guest';
+    session.answered = '[]';
   }
   next();
 })
 
+// sync store with database
 store.sync();
-// sequelize.sync();
 
-/*Set Routes into Application*/
+// Set Routes into Application
 app.use('/', routes);
 app.use('/signup', signup);
 app.use('/login', login);
@@ -131,13 +126,13 @@ if (app.get('env') === 'development') {
 
 // production error handler
 // no stacktraces leaked to user
-// app.use(function(err, req, res, next) {
-//   res.status(err.status || 500);
-//   res.render('error', {
-//       message: err.message,
-//       error: {}
-//   });
-// });
+app.use(function(err, req, res, next) {
+  res.status(err.status || 500);
+  res.render('error', {
+    message: err.message,
+    error: {}
+  });
+});
 
 
 module.exports = app;

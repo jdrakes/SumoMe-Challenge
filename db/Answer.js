@@ -1,5 +1,6 @@
 var Sequelize = require('sequelize');
 
+// Initialize sequelize database connection
 var sequelize = new Sequelize('sumo', 'root', 'sumoadmin', {
   host: 'localhost',
   dialect: 'mysql',
@@ -10,9 +11,9 @@ var sequelize = new Sequelize('sumo', 'root', 'sumoadmin', {
   }
 });
 
-
+// Define Answer table definition
 var Answer = sequelize.define('answer', {
-	questionId: Sequelize.STRING,
+  questionId: Sequelize.STRING,
   userId: Sequelize.STRING,
   question: Sequelize.STRING,
   answer: Sequelize.STRING,
