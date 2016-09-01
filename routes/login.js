@@ -11,33 +11,33 @@ router.get('/', function(req, res, next) {
 
 // Process login information
 router.post('/login_action', function(req, res) {
-  var username = req.body.username;
+  var userName = req.body.username;
   var password = req.body.password;
+  var inputValid = checkInputs(userName);
   var id;
-  var displayname;
-  var inputValid = checkInputs(username);
+  var displayName;
   if (inputValid.error) {
     return;
   }
   User.findOne({
       where: {
-        email: username
+        email: userName
       }
     })
     .then(function(user) {
       if (!user) {
         res.status(400).send({ error: 'Username not found. Please try again.' });
         return false;
-      } else if (user.password != password || user.email != username) {
+      } else if (user.password != password || user.email != userName) {
         console.log('wrong password, got ' + password + ', expected ' + user.password);
         res.status(400).send({ error: 'Password was incorrect. Please try again.' });
         return false;
       } else {
         id = user.userId;
-        displayname = user.displayName;
+        displayName = user.displayName;
         req.session.userId = id;
-        req.session.displayName = displayname;
-        res.send({ error: '', redirect: '/users/user/' + displayname });
+        req.session.displayName = displayName;
+        res.send({ error: '', redirect: '/users/user/' + displayName });
         return true;
       }
     })
@@ -49,9 +49,9 @@ router.post('/login_action', function(req, res) {
 });
 
 // check login credentials and validate them
-function checkInputs(username) {
+function checkInputs(userName) {
   console.log('checking inputs');
-  if (!/[\w.+-_]+@[\w.-]+.[\w]+/.test(username))
+  if (!/[\w.+-_]+@[\w.-]+.[\w]+/.test(userName))
     return { error: 'Invalid username was submitted.' };
   else
     return { error: '' };

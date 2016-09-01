@@ -13,7 +13,7 @@ router.get('/', function(req, res, next) {
 // Proccess signup information.
 router.post('/signup_action', function(req, res) {
   var email = req.body.email;
-  var username = req.body.display;
+  var userName = req.body.display;
   var result = null;
   var validInputs;
   delete req.body.re_password;
@@ -43,7 +43,7 @@ router.post('/signup_action', function(req, res) {
         return { error: 'Email address has already been used to create an account.' };
       User.findAll({
           where: {
-            userId: username
+            userId: userName
           }
         })
         .then(function(user) {
@@ -77,8 +77,7 @@ function checkInputs(inputsObj) {
   var expectedKeys = ['first_name', 'last_name', 'email', 'display', 'password'];
   var inputs = _und.values(inputsObj);
   var keys = _und.keys(inputsObj);
-  console.log(inputs);
-  console.log(keys);
+
   if (keys.length !== expectedKeys.length) {
     return { error: 'Unexpected number of inputs submitted.' };
   } else {
