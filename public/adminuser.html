@@ -40,7 +40,7 @@
     </nav>
     <div id="content-holder" class="row">
         <div id="content" class="col-xs-7 center-block">
-            <div id="exTab3" class="container">
+            <div id="tab" class="container">
                 <ul class="nav nav-pills">
                     <li class="active">
                         <a href="#questionHolder" data-toggle="tab">Create Question</a>
@@ -57,25 +57,31 @@
                                 <h3 class="panel-title">Write Question</h3>
                             </div>
                             <div class="panel-body">
-                            <form id="question-form" action="/admin/question" method="post">  
-                                <textarea id="question" name="question" class="form-control" rows="3"></textarea>
-                                <input id='choice1' name="choice1" type="text" class="choice form-control" placeholder="Answer Choice 1">
-                                <input id='choice2' name="choice2" type="text" class="choice form-control" placeholder="Answer Choice 2">
-                                <input id='choice3' name="choice3" type="text" class="choice form-control" placeholder="Answer Choice 3">
-                                <button class="btn btn-survey-purple" type="submit">Create Question</button>
-                            </form>
+                                <form id="question-form" action="/admin/question" method="post">
+                                    <textarea id="question" name="question" class="form-control" rows="3"></textarea>
+                                    <input id='choice1' name="choice1" type="text" class="choice form-control" placeholder="Answer Choice 1">
+                                    <input id='choice2' name="choice2" type="text" class="choice form-control" placeholder="Answer Choice 2">
+                                    <input id='choice3' name="choice3" type="text" class="choice form-control" placeholder="Answer Choice 3">
+                                    <button class="btn btn-survey-purple" type="submit">Create Question</button>
+                                </form>
                             </div>
                         </div>
                     </div>
                     <div class="tab-pane" id="results">
                         <h3>Survey Results</h3>
+                        <select id='results-select' class="form-control">
+                            <option value="defualt" disabled="true" selected="true">Choose a Question</option>
+                        </select>
+                        <div id="chart-holder"></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <script type="text/javascript" src="/js/highcharts-4.2.6.js"></script>
     <script type="text/javascript" src="/js/adminpage.js"></script>
     <script type="text/javascript" src="/js/createquestion.js"></script>
+    <script type="text/javascript" src="/js/surveyresults.js"></script>
 </body>
 
 </html>

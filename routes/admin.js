@@ -25,7 +25,7 @@ router.get('/loggedin', function(req, res, next) {
       .then(function(user) {
         console.log(user);
         if (!user) {
-          res.status(400). send({error: 'Not an admin.'});
+          res.status(400).send({ error: 'Not an admin.' });
           return;
         } else {
           res.send({ username: req.session.userId });
@@ -176,49 +176,108 @@ router.post('/question', authenticatedAdmin, function(req, res) {
   var choice1 = body.choice1;
   var choice2 = body.choice2;
   var choice3 = body.choice3;
-  if (body.question && body.choice1 && body.choice2 && body.choice3){
-      Question.sync({force: false})
-      .then(function(){
+  if (body.question && body.choice1 && body.choice2 && body.choice3) {
+    Question.sync({ force: false })
+      .then(function() {
         console.log('Creating Question');
         Question.create({
             'question': question,
-            'answerChoices': JSON.stringify([choice1,choice2,choice3]),
-            'answer': JSON.stringify([0,0,0])
-        })
-        .then(function(){
-          res.send({error: ''});
-          return;
-        })
+            'answerChoices': JSON.stringify([choice1, choice2, choice3]),
+            'answer': JSON.stringify([0, 0, 0])
+          })
+          .then(function() {
+            res.send({ error: '' });
+            return;
+          })
       })
-       .catch(function(e) {
+      .catch(function(e) {
         console.log(e);
         res.status(400).send({ error: e });
         return e;
       });
-  }
-  else if(body.question && body.choice1 && body.choice2 ){
-      Question.sync({force: false})
-      .then(function(){
+  } else if (body.question && body.choice1 && body.choice2) {
+    Question.sync({ force: false })
+      .then(function() {
         console.log('Creating Question');
         Question.create({
             'question': question,
-            'answerChoices': JSON.stringify([choice1,choice2]),
-            'answer': JSON.stringify([0,0])
-        })
-        .then(function(){
-          res.send({error: ''});
-          return;
-        })
+            'answerChoices': JSON.stringify([choice1, choice2]),
+            'answer': JSON.stringify([0, 0])
+          })
+          .then(function() {
+            res.send({ error: '' });
+            return;
+          })
       })
-       .catch(function(e) {
+      .catch(function(e) {
         console.log(e);
         res.status(400).send({ error: e });
         return e;
       });
+  } else {
+    res.status(400).send({ error: 'Invalid inputs submitted. Please fill out question box and answer choices one and two.' })
   }
-  else{
-    res.status(400).send({error: 'Invalid inputs submitted. Please fill out question box and answer choices one and two.'})
-  }
+});
+
+router.get('/questionIds', authenticatedAdmin, function(req, res) {
+  return Question.findAll({})
+    .then(function(questions) {
+      var questionIds = [];
+      var questionsObj = {};
+      if (!questions)
+        throw new Error('No questions in databse.');
+
+      console.log(questions);
+      questions.forEach(function(log) {
+        var question = log.get().question;
+        var questionId = log.get().questionId;
+        questionIds.push({ 'id': questionId, 'question': question });
+      })
+      console.log(questionIds);
+      if (questionIds.length === 0)
+        throw new Error('No new questions for user.');
+      res.send(questionIds);
+      return questionIds;
+    })
+    .catch(function(e) {
+      console.log(e);
+      res.status(400).send({ error: e.message });
+      return e;
+    });
+});
+
+/*Retrieve results from quiestion by id*/
+router.get('/question/:id', authenticatedAdmin, function(req, res) {
+  var questionId = req.params.id;
+  return Question.findOne({
+      where: { questionId: questionId }
+    })
+    .then(function(questions) {
+      var questionIds = [];
+      var resultObj = {};
+      if (!questions)
+        throw new Error('Questions does not exist.');
+
+      console.log(questions);
+      // var question = questions.question;
+      // var answerChoices = JSON.parse(questions.answerChoices);
+      // var questionId = questions.questionId;
+      var choices = JSON.parse(questions.answerChoices);
+      var answers =  JSON.parse(questions.answer);
+      var results = [];
+      for(c in choices){
+        results.push({answer: choices[c], result: answers[c]});
+      }
+      resultObj = { id: questionId, question: questions.question, results: results};
+      console.log(resultObj);
+      res.send(resultObj);
+      return resultObj;
+    })
+    .catch(function(e) {
+      console.log(e);
+      res.status(400).send({ error: e.message });
+      return e;
+    });
 });
 
 /*
