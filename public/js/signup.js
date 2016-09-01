@@ -59,7 +59,7 @@ function signUp(data, defer) {
       dataType: 'json'
     }).done(function(data) {
       var result;
-      if (data.error) {
+      if (!data.error) {
         result = 'success';
         if (typeof data.redirect == 'string')
           window.location = data.redirect;
