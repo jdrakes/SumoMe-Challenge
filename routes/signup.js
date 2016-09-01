@@ -30,11 +30,8 @@ router.post('/signup_action', function(req, res) {
       }
     })
     .then(function(user) {
-      console.log('User: ' + user);
-      console.log(user);
       if (user)
         result = user;
-      console.log('Result: ' + result);
       return result;
     })
     .then(function(user) {

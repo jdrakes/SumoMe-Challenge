@@ -62,7 +62,7 @@ router.get('/user/:displayName', authenticated, function(req, res, next) {
     })
     .catch(function(e) {
       console.log(e);
-      res.status(400).send({ error: e });
+      res.status(400).send({ error: e.message });
       return e;
     });
 });

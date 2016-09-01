@@ -1,7 +1,7 @@
 
 # SumoMe-Challenge
 ## Sumo Coding Challenge
-## Survey Junkies
+### Survey Junkies
 
 ### Task
  - Create a web app written in Node.JS using an Express based framework, SequelizeJS, and MySQL.

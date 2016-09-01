@@ -43,7 +43,7 @@ router.post('/login_action', function(req, res) {
     })
     .catch(function(e) {
       console.log(e);
-      res.status(400).send({ error: e });
+      res.status(400).send({ error: e.message });
       return e;
     });
 });

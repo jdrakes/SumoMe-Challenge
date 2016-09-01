@@ -106,7 +106,7 @@ router.post('/login_action', function(req, res) {
     })
     .catch(function(e) {
       console.log(e);
-      res.status(400).send({ error: e });
+      res.status(400).send({ error: e.message });
       return e;
     });
 });
@@ -153,7 +153,7 @@ router.get('/user/:userId', authenticatedAdmin, function(req, res, next) {
     })
     .catch(function(e) {
       console.log(e);
-      res.status(400).send({ error: e });
+      res.status(400).send({ error: e.message });
       return e;
     });
 });
@@ -181,7 +181,7 @@ router.post('/question', authenticatedAdmin, function(req, res) {
       })
       .catch(function(e) {
         console.log(e);
-        res.status(400).send({ error: e });
+        res.status(400).send({ error: e.message });
         return e;
       });
   } else if (body.question && body.choice1 && body.choice2) {
@@ -200,7 +200,7 @@ router.post('/question', authenticatedAdmin, function(req, res) {
       })
       .catch(function(e) {
         console.log(e);
-        res.status(400).send({ error: e });
+        res.status(400).send({ error: e.message });
         return e;
       });
   } else {
@@ -285,7 +285,7 @@ function authenticatedAdmin(req, res, next) {
       })
       .catch(function(e) {
         console.log(e);
-        res.status(400).send({ error: e });
+        res.status(400).send({ error: e.message });
         return e;
       });
   } else
