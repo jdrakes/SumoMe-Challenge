@@ -4,14 +4,13 @@ $(document).ready(function() {
   $('.header').html('Welcome Admin!')
 });
 
-/*
-    Function determines which user is signed in to app.
+/**
+ * Parse url to determine user name for display.
+ * @return {String} return user name else return null
  */
 function checkUrl() {
   var path = window.location.pathname;
-  console.log(path);
-  console.log(path.split("/")[3]);
-  var paths = path.split("/");
+  var paths = path.split('/');
   if (paths.length !== 4) {
     window.location = '/';
     return null;

@@ -24,22 +24,23 @@
 }
 
 .tab-pane {
-	padding:10px;
+    padding: 10px;
 }
 
-.tab-pane select{
-	margin-bottom: 10px;
+.tab-pane select {
+    margin-bottom: 10px;
 }
 
-.tab-content h3, .tab-content h4 {
-	color:white;
+.tab-content h3,
+.tab-content h4 {
+    color: white;
 }
 
 #tab .nav-pills > li > a {
-  border-radius: 4px 4px 0 0 ;
+    border-radius: 4px 4px 0 0;
 }
 
 #chart-holder {
-	border-radius: 25px;
+    border-radius: 25px;
     overflow: hidden;
 }

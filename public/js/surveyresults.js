@@ -15,7 +15,7 @@ function getQuestionIds() {
       var text = '';
       console.log(questionArray);
       for (q in questionArray) {
-        text += '<option value="' + questionArray[q].id + '">' + questionArray[q].question + '</option>'
+        text += '<option value="' + questionArray[q].id + '">' + questionArray[q].question + '</option>';
       }
       if (text)
         $('#results-select').append(text);
@@ -68,7 +68,6 @@ function resultChart(resultsObj) {
     console.log(resultsObj);
     option.title.text = resultsObj.question;
     option.series =data;
-    // option.xAxis = {categories: categories};
     console.log(data);
     console.log(option);
     $('#chart-holder').highcharts(option);

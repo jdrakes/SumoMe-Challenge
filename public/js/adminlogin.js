@@ -5,8 +5,9 @@ $(document).ready(function() {
     getAdminLoggedIn();
 });
 
-/*
-    Function to determine if a seesion exists for current user.
+/**
+ * Check is admin is currently signed in
+ * @return {none} result change login functionality depending on admin status
  */
 function getAdminLoggedIn() {
   $.get('/admin/loggedin/permission')
@@ -20,48 +21,52 @@ function getAdminLoggedIn() {
     });
 }
 
-/*
-    Function to validate inputs before sending to server.
+/**
+ * Validate login inputs before sending to server
+ * @return {none} result inputs will be sent to server if valid else reported
  */
 function loginAction() {
-  $("#login-form").submit(function(evt) {
+  $('#login-form').submit(function(evt) {
     evt.preventDefault();
     var defer = $.Deferred();
     var inputArr = [];
     var inputObj = {};
-    var msg = "";
-    $("#login-form input").each(function() {
+    var msg = '';
+    $('#login-form input').each(function() {
       var input = $(this);
       var inputVal = $(this).val();
 
-      if (inputVal === "") {
-        msg += "Please fill out " + this.name + ".\n";
+      if (inputVal) {
+        msg += 'Please fill out ' + this.name + '.\n';
         inputArr.push(inputVal);
-      } else if (inputVal !== "Sign Up") {
+      } else if (inputVal !== 'Sign Up') {
         inputObj[this.name] = inputVal;
         inputArr.push(inputVal);
       }
 
     });
 
-    if (msg !== "") {
+    if (msg) {
       alert(msg);
     } else if (!/[\w.+-_]+@[\w.-]+.[\w]+/.test(inputObj.username))
-      alert("Invalid email address was input.");
+      alert('Invalid email address was input.');
     else {
       login(inputObj, defer);
       defer.then(function(result) {
-        if (result !== "success")
+        if (result !== 'success')
           alert(result);
         else
-          alert("You have succesfully logged in!");
+          alert('You have succesfully logged in!');
       });
     }
   });
 }
 
-/*
-    Function to send login information to server and return results.
+/**
+ * Send admin login information to server
+ * @param  {Object} data  admin login credentials
+ * @param  {Promise} defer promise object
+ * @return {none}       result admin login success or failure
  */
 function login(data, defer) {
   data = JSON.stringify(data);
@@ -69,22 +74,22 @@ function login(data, defer) {
       url: '/admin/login_action',
       method: "POST",
       data: data,
-      contentType: "application/json",
-      dataType: "json"
+      contentType: 'application/json',
+      dataType: 'json'
     }).done(function(data) {
       var result;
-      if (data.error === "") {
+      if (data.error) {
         result = 'success';
-        if (typeof data.redirect == 'string')
+        if (typeof data.redirect === 'string')
           window.location = data.redirect;
       }
-      if (defer !== null || defer !== undefined)
+      if (defer)
         defer.resolve(result);
     })
     .fail(function(error) {
       errorMessage = JSON.parse(error.responseText);
       result = errorMessage.error;
-      if (defer !== null || defer !== undefined)
+      if (defer)
         defer.resolve(result);
     });
 }
