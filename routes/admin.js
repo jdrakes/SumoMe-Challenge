@@ -5,30 +5,29 @@ var Question = require('../db/Question');
 var Answer = require('../db/Answer');
 var path = require('path');
 
-/* GET login page. */
+// GET login page
 router.get('/', function(req, res, next) {
   res.sendFile(path.join(__dirname, '../public/adminlogin.html'));
 });
 
-/*Get if admin user is logged in*/
+// Get if admin user is logged
 router.get('/loggedin', function(req, res, next) {
-  console.log(req.session.userId);
-  if (!req.session.userId) {
+  var session = req.session;
+  if (!session.userId) {
     res.status(400).send({ username: null });
   } else {
     User.findOne({
         where: {
-          "userId": req.session.userId,
-          "admin": true
+          userId: session.userId,
+          admin: true
         }
       })
       .then(function(user) {
-        console.log(user);
         if (!user) {
           res.status(400).send({ error: 'Not an admin.' });
           return;
         } else {
-          res.send({ username: req.session.userId });
+          res.send({ username: session.userId });
           return;
         }
       })
@@ -40,25 +39,24 @@ router.get('/loggedin', function(req, res, next) {
   }
 });
 
-/*Get if admin user is logged in permission*/
+// Get if admin user is logged in permission
 router.get('/loggedin/permission', function(req, res, next) {
-  console.log(req.session.userId);
+  var session = req.session;
   if (!req.session.userId) {
     res.status(400).send({ username: null });
   } else {
     User.findOne({
         where: {
-          "userId": req.session.userId,
-          "admin": true
+          userId: session.userId,
+          admin: true
         }
       })
       .then(function(user) {
-        console.log(user);
         if (!user) {
           res.redirect('/');
           return;
         } else {
-          res.send({ username: req.session.userId });
+          res.send({ username: session.userId });
           return;
         }
       })
@@ -70,46 +68,39 @@ router.get('/loggedin/permission', function(req, res, next) {
   }
 });
 
-/* Process login information. */
+// Process login information
 router.post('/login_action', function(req, res) {
-  console.log(req.body);
   var username = req.body.username;
   var password = req.body.password;
+  var inputValid = checkInputs(username);
+  var session = req.session;
   var id;
   var displayname;
-  console.log(username, password);
-  console.log("I made it");
-  var inputValid = checkInputs(username);
-  console.log(inputValid);
-  if (inputValid.error !== "") {
+
+  if (inputValid.error) {
     console.log(inputValid);
     return;
   }
   User.findOne({
       where: {
-        "email": username,
-        "admin": true
+        email: username,
+        admin: true
       }
     })
     .then(function(user) {
-      console.log("user is" + user);
-      console.log(user);
       if (!user) {
-        console.log("!user");
         res.status(400).send({ error: 'Username not found. Please try again.' });
         return false;
       } else if (user.password != password || user.email != username) {
-        console.log("wrong password, got " + password + ", expected " + user.password);
+        console.log('wrong password, got ' + password + ', expected ' + user.password);
         res.status(400).send({ error: 'Password was incorrect. Please try again.' });
         return false;
       } else {
         id = user.userId;
         displayname = user.displayName;
-        console.log("success?");
-        console.log(id, displayname);
-        req.session.userId = id;
-        req.session.displayName = displayname;
-        res.send({ error: "", redirect: '/admin/user/' + id });
+        session.userId = id;
+        session.displayName = displayname;
+        res.send({ error: '', redirect: '/admin/user/' + id });
         return true;
       }
     })
@@ -120,36 +111,35 @@ router.post('/login_action', function(req, res) {
     });
 });
 
-/*Get user log out*/
+// Get log out user
 router.get('/logout', authenticatedAdmin, function(req, res) {
   console.log('logging out');
   req.session.destroy();
   res.redirect('/');
 });
 
-/* GET users listing. */
+// GET users page
 router.get('/user/:userId', authenticatedAdmin, function(req, res, next) {
+  var session = req.session;
   var userId = req.params.userId;
-  var userId = req.session.userId;
-  console.log(req.session);
-  if (!req.session) {
+  var userId = session.userId;
+  if (!session) {
     res.redirect('/');
     return;
-  } else if (!req.session.userId && !req.session.displayName) {
+  } else if (!session.userId && !session.displayName) {
     res.redirect('/');
     return;
   }
 
   User.findOne({
       where: {
-        "userId": userId,
-        "admin": true
+        userId: userId,
+        admin: true
       }
     })
     .then(function(user) {
-      console.log(user);
       if (!user) {
-        if (userId !== req.session.userId) {
+        if (userId !== session.userId) {
           res.redirect('/');
           return;
         } else {
@@ -168,9 +158,8 @@ router.get('/user/:userId', authenticatedAdmin, function(req, res, next) {
     });
 });
 
-/*Create Question Handler*/
+// Create Question Handl
 router.post('/question', authenticatedAdmin, function(req, res) {
-  console.log(req.body);
   var body = req.body;
   var question = body.question;
   var choice1 = body.choice1;
@@ -224,13 +213,15 @@ router.get('/questionIds', authenticatedAdmin, function(req, res) {
     .then(function(questions) {
       var questionIds = [];
       var questionsObj = {};
+      var question;
+      var questionId;
       if (!questions)
         throw new Error('No questions in databse.');
 
       console.log(questions);
       questions.forEach(function(log) {
-        var question = log.get().question;
-        var questionId = log.get().questionId;
+        question = log.get().question;
+        questionId = log.get().questionId;
         questionIds.push({ 'id': questionId, 'question': question });
       })
       console.log(questionIds);
@@ -246,30 +237,25 @@ router.get('/questionIds', authenticatedAdmin, function(req, res) {
     });
 });
 
-/*Retrieve results from quiestion by id*/
+/// Retrieve results from quiestion by
 router.get('/question/:id', authenticatedAdmin, function(req, res) {
   var questionId = req.params.id;
   return Question.findOne({
       where: { questionId: questionId }
     })
     .then(function(questions) {
+      var choices = JSON.parse(questions.answerChoices);
+      var answers = JSON.parse(questions.answer);
+      var results = [];
       var questionIds = [];
       var resultObj = {};
       if (!questions)
         throw new Error('Questions does not exist.');
 
-      console.log(questions);
-      // var question = questions.question;
-      // var answerChoices = JSON.parse(questions.answerChoices);
-      // var questionId = questions.questionId;
-      var choices = JSON.parse(questions.answerChoices);
-      var answers =  JSON.parse(questions.answer);
-      var results = [];
-      for(c in choices){
-        results.push({answer: choices[c], result: answers[c]});
+      for (c in choices) {
+        results.push({ answer: choices[c], result: answers[c] });
       }
-      resultObj = { id: questionId, question: questions.question, results: results};
-      console.log(resultObj);
+      resultObj = { id: questionId, question: questions.question, results: results };
       res.send(resultObj);
       return resultObj;
     })
@@ -280,16 +266,13 @@ router.get('/question/:id', authenticatedAdmin, function(req, res) {
     });
 });
 
-/*
-    Verify is user has been authenticated in session.
- */
+// Verify is user has been authenticated in session.
 function authenticatedAdmin(req, res, next) {
-  console.log(req.session);
   if (req.session.userId) {
     User.findOne({
         where: {
-          "userId": req.session.userId,
-          "admin": true
+          userId: req.session.userId,
+          admin: true
         }
       })
       .then(function(user) {
@@ -311,10 +294,9 @@ function authenticatedAdmin(req, res, next) {
 
 
 function checkInputs(username) {
-  console.log('checking inputs');
   if (!/[\w.+-_]+@[\w.-]+.[\w]+/.test(username))
-    return { error: "Invalid username was submitted." };
+    return { error: 'Invalid username was submitted.' };
   else
-    return { error: "" };
+    return { error: '' };
 }
 module.exports = router;

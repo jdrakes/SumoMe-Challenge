@@ -3,56 +3,56 @@ var router = express.Router();
 var User = require('../db/User');
 var path = require('path');
 
-/*Get if user is logged in*/
+//Get if user is logged in
 router.get('/loggedin', function(req, res, next) {
-  console.log(req.session.userId);
-  if (!req.session) {
+  var session = req.session;
+  if (!session) {
     res.status(400).send({ username: null });
-  } else if (!req.session.userId) {
+  } else if (!session.userId) {
     res.status(400).send({ username: null });
-  }else if (req.session.userId === 'guest') {
+  }else if (session.userId === 'guest') {
     res.status(400).send({ username: null });
   } else {
-    res.send({ username: req.session.displayName });
+    res.send({ username: session.displayName });
   }
 });
 
-/*Get user log out*/
+// Get user log out
 router.get('/logout', authenticated, function(req, res) {
     console.log('logging out');
     req.session.destroy();
     res.redirect('/');
 });
 
-/* GET users listing. */
+// GET users listing.
 router.get('/user/:displayName', authenticated, function(req, res, next) {
   var displayName = req.params.displayName;
   var userId = req.session.userId;
-  console.log(req.session);
-  if (!req.session) {
+  var session = req.session;
+  if (!session) {
     res.redirect('/');
     return;
-  } else if (!req.session.userId && !req.session.displayName) {
+  } else if (!session.userId && !session.displayName) {
     res.redirect('/');
     return;
   }
-  else if(req.session.userId === 'guest'){
+  else if(session.userId === 'guest'){
     res.redirect('/');
   }
 
   User.findOne({
       where: {
-        "displayName": displayName
+        displayName: displayName
       }
     })
     .then(function(user) {
       console.log(user);
       if (!user) {
-        if (displayName !== req.session.displayName) {
+        if (displayName !== session.displayName) {
           res.redirect('/');
           return;
         } else {
-          req.session.destroy();;
+          session.destroy();;
           res.redirect('/');
           return;
         }
@@ -67,9 +67,7 @@ router.get('/user/:displayName', authenticated, function(req, res, next) {
     });
 });
 
-/*
-    Verify is user has been authenticated in session.
- */
+// Verify is user has been authenticated in session.
 function authenticated(req, res, next) {
   console.log(req.session);
   if (req.session.userId) {

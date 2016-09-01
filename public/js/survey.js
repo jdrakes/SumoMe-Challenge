@@ -89,7 +89,6 @@ function submitAnswer(questionObj, answer) {
     })
     .fail(function(error) {
       $('#survey-modal-btn').click();
-      console.log(error);
       errorMessage = JSON.parse(error.responseText);
       result = errorMessage.error;
       console.log(result);

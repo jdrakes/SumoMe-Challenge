@@ -7,16 +7,14 @@ var path = require('path');
 var Sequelize = require('sequelize');
 var _und = require('underscore');
 
+// Initialize sequelize database connection
 var sequelize = new Sequelize('sumo', 'root', 'sumoadmin', {
   host: 'localhost',
   dialect: 'mysql',
-  pool: {
-    max: 5,
-    min: 0,
-    idle: 10000
-  }
+  pool: { max: 5, min: 0, idle: 10000 }
 });
 
+// Get random unanswered question
 router.get('/', function(req, res) {
   var userId = req.session.userId;
   var answered = req.session.answered;
@@ -25,7 +23,7 @@ router.get('/', function(req, res) {
 
   //Implemented guest random unique questions
   if (!userId || userId === 'guest') {
-    if(userId === 'guest')
+    if (userId === 'guest')
       answered = JSON.parse(answered);
     return Question.findAll({})
       .then(function(questions) {
@@ -34,22 +32,18 @@ router.get('/', function(req, res) {
         if (!questions)
           throw new Error('No questions in databse.');
 
-        console.log(questions);
         questions.forEach(function(log) {
           var question = log.get().question;
           var answerChoices = JSON.parse(log.get().answerChoices);
           var questionId = log.get().questionId;
           questionIds.push(questionId);
-          questionsObj[questionId] = { 'id': questionId, 'question': question, 'choices': answerChoices };
+          questionsObj[questionId] = { id: questionId, question: question, choices: answerChoices };
         })
-        if(answered)
+        if (answered)
           questionIds = _und.difference(questionIds, answered);
-        console.log(answered);
-        console.log(questionIds);
         if (questionIds.length === 0)
           throw new Error('No new questions for guest.');
         var randomNum = getRandomInt(0, questionIds.length);
-        console.log(randomNum);
         res.send(questionsObj[questionIds[randomNum]]);
         return true;
       })
@@ -84,27 +78,17 @@ router.get('/', function(req, res) {
               if (!questions)
                 throw new Error('No questions in databse.');
 
-              console.log(questions);
               questions.forEach(function(log) {
                 var question = log.get().question;
                 var answerChoices = JSON.parse(log.get().answerChoices);
                 var questionId = log.get().questionId;
                 questionIds.push(questionId);
-                questionsObj[questionId] = { 'id': questionId, 'question': question, 'choices': answerChoices };
+                questionsObj[questionId] = { id: questionId, question: question, choices: answerChoices };
               })
-              console.log(questionsObj);
-              console.log('questionIds');
-              console.log(questionIds);
-              console.log('answered ids');
-              console.log(answeredQuestions);
-              console.log(_und.difference(questionIds, answeredQuestions));
               questionIds = _und.difference(questionIds, answeredQuestions);
-              console.log(questionIds);
               if (questionIds.length === 0)
                 throw new Error('No new questions for user.');
               var randomNum = getRandomInt(0, questionIds.length);
-              console.log(randomNum);
-              // res.send(questionsObj[questionIds[randomNum]]);
               return questionsObj[questionIds[randomNum]];
             })
         })
@@ -121,9 +105,7 @@ router.get('/', function(req, res) {
     });
 });
 
-/*
-  Parse answer and update questions, user, and
- */
+// Parse answer and update questions, user, and answer tables
 router.post('/answer', function(req, res) {
   var userId = req.session.userId;
   var guestAnswered = req.session.answered;
@@ -135,22 +117,21 @@ router.post('/answer', function(req, res) {
   var questionAnswers;
 
   //If no answer was selected
-  if (!answerIndex && answerIndex !== 0){
+  if (!answerIndex && answerIndex !== 0) {
     res.status(400).send({ error: 'No answer was submitted.' });
     return;
-  }
-  else if (answerIndex < 0){
+  } else if (answerIndex < 0) {
     res.status(400).send({ error: 'No answer was submitted.' });
     return;
   }
   //If the user is a guest record answer only
   if (!userId || userId === 'guest') {
-    if(userId === 'guest')
+    if (userId === 'guest')
       guestAnswered = JSON.parse(guestAnswered);
     return sequelize.transaction(function(t) {
         return Question.findOne({
             where: {
-              'questionId': questionId
+              questionId: questionId
             }
           }, { transaction: t })
           .then(function(result) {
@@ -160,19 +141,19 @@ router.post('/answer', function(req, res) {
             questionAnswers[answerIndex] = questionAnswers[answerIndex] + 1;
             questionAnswers = JSON.stringify(questionAnswers);
             return Question.update({
-              'answer': questionAnswers
-            }, {
-              where: {
-                'questionId': questionId
-              }
-            }, { transaction: t })
-            .then(function(){
-              if(guestAnswered){
-                guestAnswered.push(questionId);
-                req.session.answered = JSON.stringify(guestAnswered);
-              }
-              return true;
-            })
+                answer: questionAnswers
+              }, {
+                where: {
+                  questionId: questionId
+                }
+              }, { transaction: t })
+              .then(function() {
+                if (guestAnswered) {
+                  guestAnswered.push(questionId);
+                  req.session.answered = JSON.stringify(guestAnswered);
+                }
+                return true;
+              })
           })
       })
       .then(function(result) {
@@ -187,11 +168,11 @@ router.post('/answer', function(req, res) {
       });
   }
 
-  //if user record answer and update tables with answer
+  // if user record answer and update tables with answer
   return sequelize.transaction(function(t) {
       return Question.findOne({
           where: {
-            'questionId': questionId
+            questionId: questionId
           }
         }, { transaction: t })
         .then(function(result) {
@@ -201,18 +182,18 @@ router.post('/answer', function(req, res) {
           questionAnswers[answerIndex] = questionAnswers[answerIndex] + 1;
           questionAnswers = JSON.stringify(questionAnswers);
           return Question.update({
-              'answer': questionAnswers
+              answer: questionAnswers
             }, {
               where: {
-                'questionId': questionId
+                questionId: questionId
               }
             }, { transaction: t })
             .then(function() {
               return Answer.create({
-                  'question': question,
-                  'questionId': questionId,
-                  'userId': userId,
-                  'answer': answer
+                  question: question,
+                  questionId: questionId,
+                  userId: userId,
+                  answer: answer
                 }, { transaction: t })
                 .then(function() {
 
@@ -252,7 +233,6 @@ router.post('/answer', function(req, res) {
 })
 
 // Returns a random integer between min (included) and max (excluded)
-// Using Math.round() will give you a non-uniform distribution!
 function getRandomInt(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);

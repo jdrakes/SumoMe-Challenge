@@ -4,50 +4,40 @@ var _und = require('underscore');
 var User = require('../db/User');
 var path = require('path');
 
-/* GET login page. */
+// GET login page.
 router.get('/', function(req, res, next) {
   res.sendFile(path.join(__dirname, '../public/login.html'));
 });
 
-/* Process login information. */
+// Process login information
 router.post('/login_action', function(req, res) {
-  console.log(req.body);
   var username = req.body.username;
   var password = req.body.password;
   var id;
   var displayname;
-  console.log(username, password);
-  console.log("I made it");
   var inputValid = checkInputs(username);
-  console.log(inputValid);
-  if (inputValid.error !== "") {
-    console.log(inputValid);
+  if (inputValid.error) {
     return;
   }
   User.findOne({
       where: {
-        "email": username
+        email: username
       }
     })
     .then(function(user) {
-      console.log("user is" + user);
-      console.log(user);
       if (!user) {
-        console.log("!user");
         res.status(400).send({ error: 'Username not found. Please try again.' });
         return false;
       } else if (user.password != password || user.email != username) {
-        console.log("wrong password, got " + password + ", expected " + user.password);
+        console.log('wrong password, got ' + password + ', expected ' + user.password);
         res.status(400).send({ error: 'Password was incorrect. Please try again.' });
         return false;
       } else {
         id = user.userId;
         displayname = user.displayName;
-        console.log("success?");
-        console.log(id, displayname);
         req.session.userId = id;
         req.session.displayName = displayname;
-        res.send({ error: "", redirect: '/users/user/' + displayname });
+        res.send({ error: '', redirect: '/users/user/' + displayname });
         return true;
       }
     })
@@ -58,12 +48,13 @@ router.post('/login_action', function(req, res) {
     });
 });
 
+// check login credentials and validate them
 function checkInputs(username) {
   console.log('checking inputs');
   if (!/[\w.+-_]+@[\w.-]+.[\w]+/.test(username))
-    return { error: "Invalid username was submitted." };
+    return { error: 'Invalid username was submitted.' };
   else
-    return { error: "" };
+    return { error: '' };
 }
 
 module.exports = router;

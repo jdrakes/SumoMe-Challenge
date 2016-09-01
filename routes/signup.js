@@ -5,12 +5,12 @@ var User = require('../db/User');
 var path = require('path');
 var shortid = require('shortid');
 
-/* GET signup page. */
+// GET signup page.
 router.get('/', function(req, res, next) {
   res.sendFile(path.join(__dirname, '../public/signup.html'));
 });
 
-/* Proccess signup information. */
+// Proccess signup information.
 router.post('/signup_action', function(req, res) {
   var email = req.body.email;
   var username = req.body.display;
@@ -56,7 +56,7 @@ router.post('/signup_action', function(req, res) {
     .then(function(response) {
       if (response.error) {
         addUser(req.body);
-        res.send({ error: "", redirect: '/login' });
+        res.send({ error: '', redirect: '/login' });
         return true;
       } else {
         res.statusMessage = err.error;
@@ -71,36 +71,34 @@ router.post('/signup_action', function(req, res) {
     });
 });
 
-/*
-    Validate inputs are not malicious or incorrect;
- */
+// Validate inputs are not malicious or incorrect;
+
 function checkInputs(inputsObj) {
-  var expectedKeys = ["first_name", "last_name", "email", "display", "password"];
+  var expectedKeys = ['first_name', 'last_name', 'email', 'display', 'password'];
   var inputs = _und.values(inputsObj);
   var keys = _und.keys(inputsObj);
   console.log(inputs);
   console.log(keys);
   if (keys.length !== expectedKeys.length) {
-    return { error: "Unexpected number of inputs submitted." };
+    return { error: 'Unexpected number of inputs submitted.' };
   } else {
     for (var i = 0; i < keys.length; i++) {
       if (!_und.has(inputsObj, keys[i]))
-        return { error: "Unexpected input was submitted." };
+        return { error: 'Unexpected input was submitted.' };
     }
   }
-  if (_und.contains(inputs, "")) {
-    return { error: "There were empty inputs submitted." };
+  if (_und.contains(inputs, '')) {
+    return { error: 'There were empty inputs submitted.' };
   } else if (!/[\w.+-_]+@[\w.-]+.[\w]+/.test(inputsObj.email))
-    return { error: "Invalid email address was submitted." };
+    return { error: 'Invalid email address was submitted.' };
   else if (!/^[a-z0-9]+$/i.test(inputsObj.display))
-    return { error: "Invalid username was submitted." };
+    return { error: 'Invalid username was submitted.' };
   else
-    return { error: "" };
+    return { error: '' };
 }
 
-/*
-    Add new user to mongo database;
- */
+// Add new user to mongo database;
+
 function addUser(userinfo) {
   User.sync({ force: false })
   .then(function() {

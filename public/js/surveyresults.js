@@ -13,7 +13,6 @@ function getQuestionIds() {
   $.get('/admin/questionIds')
     .done(function(questionArray) {
       var text = '';
-      console.log(questionArray);
       for (q in questionArray) {
         text += '<option value="' + questionArray[q].id + '">' + questionArray[q].question + '</option>';
       }
@@ -65,11 +64,8 @@ function resultChart(resultsObj) {
       categories.push(results[r].answer);
       data.push({name: results[r].answer, data:[results[r].result]});
     }
-    console.log(resultsObj);
     option.title.text = resultsObj.question;
     option.series =data;
-    console.log(data);
-    console.log(option);
     $('#chart-holder').highcharts(option);
   }
 }
